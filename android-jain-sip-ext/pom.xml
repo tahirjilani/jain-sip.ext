@@ -21,7 +21,7 @@
 	<url>https://github.com/RestComm/jain-sip.ext</url>
 	
 	<properties>
-		<src.path>${basedir}/target/generated-sources/android</src.path>
+		<generatedsrc.path>${project.build.directory}/generated-sources/src/main/java/android</generatedsrc.path>
 	</properties>
 	
 	<dependencies>
@@ -94,8 +94,7 @@
 	</dependencies>
 
 	<build>
-		<sourceDirectory>${src.path}</sourceDirectory>
-		<outputDirectory>${basedir}/target/classes</outputDirectory>
+		<outputDirectory>${project.build.directory}/classes</outputDirectory>
 		<plugins>
 			<!-- Import jain-sip-ext from maven artifect  and extract to outputdir-->
 			<plugin>
@@ -118,7 +117,7 @@
 						  <version>${project.version}</version>
 		                  <classifier>sources</classifier>
 		                  <overWrite>true</overWrite>
-		                  <outputDirectory>${src.path}</outputDirectory>
+		                  <outputDirectory>${generatedsrc.path}</outputDirectory>
 		                  <excludes>**/META-INF/**</excludes>
 		                </artifactItem>
 		              </artifactItems>
@@ -141,7 +140,7 @@
 						</goals>
 						<inherited>false</inherited>
 						<configuration>
-							<basedir>${src.path}</basedir>
+							<basedir>${generatedsrc.path}</basedir>
 							<includes>
 								<include>**/*.java</include>
 							</includes>
@@ -169,6 +168,25 @@
 						</configuration>
 					</execution>
 				</executions>
+			</plugin>
+			<!-- Add source -->
+			 <plugin>
+				<groupId>org.codehaus.mojo</groupId>
+			    <artifactId>build-helper-maven-plugin</artifactId>
+			    <executions>
+			        <execution>
+			            <id>add-source</id>
+			            <phase>generate-sources</phase>
+			            <goals>
+			                <goal>add-source</goal>
+			            </goals>
+			            <configuration>
+			                <sources>
+			                    <source>${generatedsrc.path}</source>
+			                </sources>
+			            </configuration>
+			        </execution>
+			    </executions>
 			</plugin>
 			<!-- Attach sources -->
 			<plugin>
